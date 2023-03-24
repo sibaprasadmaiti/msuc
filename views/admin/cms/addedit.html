@@ -1,0 +1,219 @@
+<%- include ../partials/header.html %>
+  <%- include ../partials/sidebar.html %>
+
+    <link href="<%= adminbaseurl %>build/css/croppr.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css">
+    <script src="//cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
+
+
+    <div class="content_wraper">
+      <div class="main_container">
+        <div class="header_wraper">
+          <h2>
+            <%=title%>
+          </h2>
+          <ul>
+            <li><a href="<%= adminbaseurl %>dashboard">Dashboards</a></li>
+            <li><a href="<%= adminbaseurl %>cms/list/1">Cms master</a></li>
+            <li>
+              <%=title%>
+            </li>
+          </ul>
+        </div>
+        <% if(messages!='' ) {%>
+          <div class="succ_msg msg" id="succ_msg"><i class="fa fa-check" aria-hidden="true"></i>
+            <%=messages%>
+          </div>
+          <%}%>
+            <% if(errors!='' ) {%>
+              <div class="succ_err msg" id="err_msg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <%=errors%>
+              </div>
+              <% }%>
+                <form class="form-horizontal form-label-left" method="post" enctype="multipart/form-data"
+                  action="<%= adminbaseurl %>cms/addOrUpdate">
+                  <div class="content_body panel_body edit_store">
+                    <input type="hidden" name="updateId" value="<%= arrData ? arrData.id : '' %>" />
+                    <div class="panel_title">
+                      <h3>Cms Details</h3>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row edit_box">
+                      <div class="col-sm-6 mb-5">
+                        <div class="animate_form field mb-1">
+                          <span>menu Id <span class="text-danger">*</span></span>
+                          <select name="menuId" class="form-control" id="menuId">
+                            <% categorys.forEach(function(eachData){ %>
+                              <option <% if(eachData.id==arrData.menuId ){ %>selected="selected" <% }%> value="<%=eachData.id%>">
+                                  <%=eachData.title%>
+                              </option>
+                              <%})%>
+                          </select>
+
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Slug<span>*</span></span>
+                          <input id="slug" class="form-control" name="slug" type="text"
+                            value="<%= arrData ? arrData.slug : '' %>" required/>
+                          <div class="alert_msg"></div>
+                        </div>
+                      </div>
+
+                      
+                      <div class="col-sm-12 mb-5">
+                        <div class="animate_form field mb-1">
+                          <span>Title <span class="text-danger">*</span></span>
+                          <textarea id="title" class="form-control" name="title">
+                            <%= arrData ? arrData.title : '' %></textarea>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-12 mb-5">
+                        <div class="animate_form field mb-1">
+                          <span>Short Description <span class="text-danger">*</span></span>
+                          <textarea id="shortDescription" class="form-control" name="shortDescription"
+                            type="text"><%= arrData ? arrData.shortDescription : '' %></textarea>
+                        </div>
+                        <span class="text-danger font-weight-bold" id="shortDescription_error"></span>
+                      </div>
+
+                      <div class="col-sm-12 mb-5">
+                        <div class="animate_form field">
+                          <span>Content</span>
+                          <textarea id="content" class="form-control" name="content"
+                            type="text"><%= arrData ? arrData.content : '' %></textarea>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6 mb-5">
+                        <div class="animate_form field mb-1">
+                          <span>Status <span class="text-danger">*</span></span>
+                          <select name="status" class="form-control" id="status" required>
+                            <option <% if(arrData.status=='Yes' ){ %>selected="selected" <% }%> value="Yes">Yes</option>
+                            <option <% if(arrData.status=='No' ){ %>selected="selected" <% }%> value="No">No</option>
+                          </select>
+                        </div>
+                        <span class="text-danger font-weight-bold" id="status_error"></span>
+                      </div>
+
+                      <div class="col-sm-6 mb-5">
+                        <div class="animate_form field mb-1">
+                          <input type="file" class="form-control" id="images" name="images" accept="image/*" onchange="preView1()" multiple/>
+                          <div class="row">
+                            <div class="gallery"> </div>
+                            <% if(image_video !='' && image_video !=null){ %>
+                              <% image_video.forEach(function(img){ %>
+                                <div class="upload_img011">
+                                  <img id="preview" src="<%= baseurl + img.image_video_url %>" style="height: 100px; margin: 7px; width: 100px;" class="img-thumbnail" />
+                                  <div class="remove">
+                                    <a class="btn" href="<%= adminbaseurl%>cms/removeImages/<%= arrData.id %>/<%= img.id %>" class="edit_btn" onclick="return(confirm('Do you really want to delete? '));"> <i class="fa fa-trash"></i></a>
+                                  </div>
+                                </div>
+                              <%})%>
+                            <%}%>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="content_body panel_body" style="width: 100%;">
+                        <div class="panel_title">
+                          <h3>Vedio Links For Cms</h3>
+                          <button class="clone_trigger panel_btn" type="button"><i class="fa fa-plus"
+                              aria-hidden="true"></i> Add</button>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <label class="control-label" for="vedioLinks">Links<span class="required"></span>
+                            </label>
+                          </div>
+                        </div>                       
+
+                        <div class="col-sm-6 mb-5">
+                          <% if(arrData && arrData.vedioLinks) {
+                            arrData.vedioLinks.forEach(function(val) { %>
+                            <div class="row clone" style="margin-bottom: 15px;">
+                              <div class="col-sm-3" id="vedioLinksId">
+                                <input id="vedioLinks" class="form-control" name="vedioLinks" type="text"
+                                  required="required" value="<%= val ? val.image_vedio_url : '' %>" />
+                              </div>
+                              <div class="col-sm-3">
+                                <button class="remove_trigger btn btn-danger" type="button"><i class="fa fa-close"
+                                    aria-hidden="true"></i></button>
+                              </div>
+                            </div>
+                            <% }) }else{%>
+                              <div class="row clone" style="margin-bottom: 15px;">
+                                <div class="col-sm-3" id="vedioLinksId">
+                                  <input id="vedioLinks" class="form-control" name="vedioLinks" type="text"
+                                    required="required" />
+                                </div>
+                                <div class="col-sm-3">
+                                  <button class="remove_trigger btn btn-danger" type="button"><i class="fa fa-close"
+                                      aria-hidden="true"></i></button>
+                                </div>
+                              </div>
+                          <% } %>
+                              <div class="placer"></div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-3">                          
+                            <input type="hidden" id="test_id" name="test_id">
+                          </label>
+                        </div>
+                      </div>  
+
+                      
+
+                    </div>
+                    <div class="btn_right mb-4">
+                      <button id="send" type="submit" class="submit_btn">Submit</button>
+                    </div>
+                </form>
+      </div>
+    </div>
+    <script src="<%= adminbaseurl %>vendors/validator/validator.js"></script>
+    <%- include ../partials/footer.html %>
+
+
+      <script>
+        CKEDITOR.editorConfig = function (config) {
+          config.language = 'es';
+          config.uiColor = '#F7B42C';
+          config.height = 300;
+          config.toolbarCanCollapse = true;
+        };
+        CKEDITOR.replace('content');
+        CKEDITOR.replace('shortDescription');
+        CKEDITOR.replace('title');
+        CKEDITOR.config.startupMode = 'source';
+      </script>
+
+
+      <!-- -------------------------------------- validation --------------------------------  -->
+      <script>
+        $(document).ready(function () {
+          $(".clone_trigger").click(function () {
+            $('.clone').first().clone()
+              .find("input:text").val("").end()
+              .insertBefore(".placer");
+            $('input.cl:last').val('');
+            event.preventDefault();
+          });
+          $(document).on('click', '.remove_trigger', function () {
+            if ($(".clone").length > 0) {
+              if ($(".clone").length == 1) {
+                $(".clone:last")
+                  .find("input:text").val("").end()
+              } else {
+                $(this).closest('.clone').remove();
+              }
+            }
+            event.preventDefault();
+          });
+
+        });
+      </script>

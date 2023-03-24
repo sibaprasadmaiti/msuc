@@ -1,0 +1,350 @@
+<%- include ../partials/header.html %>
+<%- include ../partials/sidebar.html %>
+<link href="<%= adminbaseurl %>build/css/croppr.css" rel="stylesheet">
+<script src="<%= adminbaseurl %>ckeditor/ckeditor.js"></script>
+<!-- page content -->
+<div class="content_wraper">
+   <div class="main_container">
+      <div class="header_wraper">
+         <h2>
+            <%=title%>
+         </h2>
+         <ul>
+            <li><a href="<%= adminbaseurl %>dashboard">Dashboards</a></li>
+            <li><a href="<%= adminbaseurl %>events/list/1">Event</a></li>
+            <li>
+               <%=title%>
+            </li>
+         </ul>
+      </div>
+      <% if(messages!='' ) {%>
+      <div class="succ_msg msg" id="succ_msg">
+         <i class="fa fa-check" aria-hidden="true"></i>
+         <%=messages%>
+      </div>
+      <%}%>
+      <% if(errors!='' ) {%>
+      <div class="succ_err msg" id="err_msg">
+         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+         <%=errors%>
+      </div>
+      <% }%>
+      <form id="category-info" class="form-horizontal form-label-left" novalidate
+         method="post" enctype="multipart/form-data"
+         action="<%= adminbaseurl %>events/addOrUpdate">
+		 <input type="hidden" name="update_id" value="<%= arrData ? arrData.id : '' %>">
+         <div class="content_body panel_body">
+            <div class="panel_title">
+               <h3>
+                  <%=title%> Info
+               </h3>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tab-content">
+               <!--event content start-->
+               <div id="gen-info" class="tab-pane fade in active show">
+                  <div class="row edit_box">
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="title" type="text"
+                              value="<%= arrData ? arrData.title : '' %>" required>
+                           <span>Title<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <% 
+                           var date='';
+                           if(arrData){
+                              if(arrData.event_date){
+                                 var year = arrData.event_date.getFullYear();
+
+                                 var month = (1 + arrData.event_date.getMonth()).toString();
+                                 month = month.length > 1 ? month : '0' + month;
+
+                                 var day = arrData.event_date.getDate().toString();
+                                 day = day.length > 1 ? day : '0' + day;
+   
+                                 date=year+'-'+ month+'-'+day
+                              }
+                           }else{
+                              date='dd/mm/yyyy';
+                           }
+                            
+                           %>
+                           <input id="name" required="required" class="form-control"
+                              name="event_date" type="date"
+                              value="<%=  date  %>" required>
+                           <span>Date<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <span>Content<span></span></span>
+                           <textarea id="content" class="form-control"
+                              name="content" type="text"
+                              required="required"><%= arrData ? arrData.content : '' %></textarea>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <span>Short Description<span></span></span>
+                           <textarea id="short_description" class="form-control"
+                              name="short_description" type="text"
+                              required="required"><%= arrData ? arrData.short_description : '' %></textarea>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="time" type="time"
+                              value="<%= arrData ? arrData.time : '' %>">
+                           <span>Time<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="ticket_number" type="text"
+                              value="<%= arrData ? arrData.ticket_number : '' %>" required>
+                           <span>Ticket Number<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="location" type="text"
+                              value="<%= arrData ? arrData.location : '' %>" required>
+                           <span>Location<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="event_type" type="text"
+                              value="<%= arrData ? arrData.event_type : '' %>" required>
+                           <span>Event Type<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="name" required="required" class="form-control"
+                              name="seat" type="text"
+                              value="<%= arrData ? arrData.seat : '' %>" required>
+                           <span>Seat<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <input id="capacity" required="required" class="form-control"
+                              name="capacity" type="text"
+                              value="<%= arrData ? arrData.capacity : '' %>" required>
+                           <span>Capacity<span>*</span></span>
+                           <div class="alert_msg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <select name="banner" class="form-control">
+                              <option <% if(arrData.banner=='yes' ){ %>
+                                 selected="selected" <% }%> value="yes">Yes
+                              </option>
+                              <option <% if(arrData.banner=='no' ){ %>
+                                 selected="selected" <% }%> value="no">No
+                              </option>
+                           </select>
+                           <span>Banner</span>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <select name="homepage" class="form-control">
+                              <option <% if(arrData.homepage=='yes' ){ %>
+                                 selected="selected" <% }%> value="yes">Yes
+                              </option>
+                              <option <% if(arrData.homepage=='no' ){ %>
+                                 selected="selected" <% }%> value="no">No
+                              </option>
+                           </select>
+                           <span>Homepage</span>
+                        </div>
+                     </div>
+                     <div class="col-sm-6 parentId">
+                        <div class="animate_form field">
+                           <select name="eventCategoryId" class="form-control" id="eventCategoryId" required>
+                              <option value="">Select</option>
+                              <% if(categorys.length>0){
+                                 for(let eachData of categorys){%>
+                              <option value="<%=eachData.id%>" <%
+                                 if(arrData.eventCategoryId==eachData.id){ %>
+                                 selected='selected'<%}%> >
+                                 <%=eachData.title%>
+                              </option>
+                              <%} }%>
+                           </select>
+                           <span>Select Category*</span>
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="animate_form field">
+                           <select name="status" class="form-control" required>
+                              <option <% if(arrData.status=='active' ){ %>
+                                 selected="selected" <% }%> value="active">Active
+                              </option>
+                              <option <% if(arrData.status=='archive' ){ %>
+                                 selected="selected" <% }%> value="archive">Inactive
+                              </option>
+                           </select>
+                           <span>Status</span>
+                        </div>
+                     </div>
+
+					 <div class="col-sm-6">
+						<div class="animate_form field">
+							<label>Banner Image</label>
+							<input type="file" class="form-control" id="bannerImage" name="banner_image" accept="image/*" onchange="preView1()" <% if(bannerImage && bannerImage==''){ %> required="required" <% }%> />
+							<input type="hidden" name="bannerImage" value="<%= bannerImage ? bannerImage : '' %>" />
+							<div class="upload_img01">
+							<% if(bannerImage !='' && bannerImage != null){%>
+								<img id="previewBannerImage" src="<%= baseurl+bannerImage %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } else { %>
+								<img id="previewBannerImage" src="<%= baseurl + 'admin/events/no_image.jpg' %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } %>
+							</div>
+					   </div>
+					 </div>
+                <div class="col-sm-6">
+						<div class="animate_form field">
+							<label>Homepage Image</label>
+							<input type="file" class="form-control" id="homepageImage" name="homepage_image" accept="image/*" onchange="preView2()" <% if(homepageImage && homepageImage==''){ %> required="required" <% }%> />
+							<input type="hidden" name="homepageImage" value="<%= homepageImage ? homepageImage : '' %>" />
+							<div class="upload_img01">
+							<% if(homepageImage !='' && homepageImage != null){%>
+								<img id="previewHomepageImage" src="<%= baseurl+homepageImage %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } else { %>
+								<img id="previewHomepageImage" src="<%= baseurl + 'admin/events/no_image.jpg' %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } %>
+							</div>
+					   </div>
+					 </div>
+                <div class="col-sm-6">
+						<div class="animate_form field">
+							<label>Detail Image</label>
+							<input type="file" class="form-control" id="detailImage" name="detail_image" accept="image/*" onchange="preView3()" <% if(detailImage && detailImage==''){ %> required="required" <% }%> />
+							<input type="hidden" name="detailImage" value="<%= detailImage ? detailImage : '' %>" />
+							<div class="upload_img01">
+							<% if(detailImage !='' && detailImage != null){%>
+								<img id="previewDetailImage" src="<%= baseurl+detailImage %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } else { %>
+								<img id="previewDetailImage" src="<%= baseurl + 'admin/events/no_image.jpg' %>" style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+							<% } %>
+							</div>
+					   </div>
+					 </div>
+
+                  </div>
+               </div>
+               <!--event content end-->
+            </div>
+         </div>
+         <div class="btn_right mb-4">            
+            <button id="send" type="submit" class="submit_btn">Submit</button>
+         </div>
+      </form>
+   </div>
+</div>
+</div>
+<script src="<%= adminbaseurl %>build/js/croppr.js"></script>
+<script src="<%= adminbaseurl %>vendors/validator/validator.js"></script>
+<!-- page content -->
+<%- include ../partials/footer.html %>
+<%- include ../formvalidator/formvalidator.html %>
+<script>   
+	function preView1() {
+		 var fileInput = document.getElementById('bannerImage');
+		 var filePath = fileInput.value;
+		 var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+		 if (!allowedExtensions.exec(filePath)) {
+			 fileInput.value = '';
+			 return false;
+		 } else {
+			 if (fileInput.files && fileInput.files[0]) {
+				 var reader = new FileReader();
+				 reader.onload = function () {
+					 var output = document.getElementById('previewBannerImage');
+					 output.src = reader.result;
+				 };
+				 reader.readAsDataURL(event.target.files[0]);
+				 $("#icon-error").remove();
+			 };
+		 }
+	}
+   function preView2() {
+		 var fileInput = document.getElementById('homepageImage');
+		 var filePath = fileInput.value;
+		 var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+		 if (!allowedExtensions.exec(filePath)) {
+			 fileInput.value = '';
+			 return false;
+		 } else {
+			 if (fileInput.files && fileInput.files[0]) {
+				 var reader = new FileReader();
+				 reader.onload = function () {
+					 var output = document.getElementById('previewHomepageImage');
+					 output.src = reader.result;
+				 };
+				 reader.readAsDataURL(event.target.files[0]);
+				 $("#icon-error").remove();
+			 };
+		 }
+	}
+   function preView3() {
+		 var fileInput = document.getElementById('detailImage');
+		 var filePath = fileInput.value;
+		 var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+		 if (!allowedExtensions.exec(filePath)) {
+			 fileInput.value = '';
+			 return false;
+		 } else {
+			 if (fileInput.files && fileInput.files[0]) {
+				 var reader = new FileReader();
+				 reader.onload = function () {
+					 var output = document.getElementById('previewDetailImage');
+					 output.src = reader.result;
+				 };
+				 reader.readAsDataURL(event.target.files[0]);
+				 $("#icon-error").remove();
+			 };
+		 }
+	}
+</script>
+
+
+<script>
+   CKEDITOR.editorConfig = function (config) {
+   	config.language = 'es';
+   	config.uiColor = '#F7B42C';
+   	config.height = 300;
+   	config.toolbarCanCollapse = true;
+   
+   };
+   CKEDITOR.replace('content');
+   CKEDITOR.replace('short_description');
+</script>
+<script>
+   $(document).ready(function(){
+      
+   });
+</script>

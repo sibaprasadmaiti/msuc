@@ -1,0 +1,240 @@
+<%- include ../partials/header.html %>
+  <%- include ../partials/sidebar.html %>
+    <div class="content_wraper">
+      <div class="main_container">
+        <div class="header_wraper">
+          <h2>
+            <%=title%>
+          </h2>
+          <ul>
+            <li><a href="<%= adminbaseurl %>dashboard">Dashboards</a></li>
+            <li><a href="<%= adminbaseurl %>artist/1">Artist Gallery</a></li>
+            <li>
+              <%=title%>
+            </li>
+          </ul>
+        </div>
+        <% if(messages!='' ) {%>
+          <div class="succ_msg msg" id="succ_msg"><i class="fa fa-check" aria-hidden="true"></i>
+            <%=messages%>
+          </div>
+          <%}%>
+            <% if(errors!='' ) {%>
+              <div class="succ_err msg" id="err_msg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <%=errors%>
+              </div>
+              <% }%>
+                <form class="form-horizontal form-label-left" method="post" enctype="multipart/form-data"
+                  action="<%= adminbaseurl %>artist/1/addOrUpdate">
+                  <input type="hidden" name="updateId" value="<%= arrData ? arrData.id : '' %>" />
+                  <div class="content_body panel_body edit_store">
+                    <div class="panel_title">
+                      <h3>Artist Information</h3>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row edit_box">
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Slug<span>*</span></span>
+                          <input id="slug" class="form-control" name="slug" type="text" required="required"
+                            value="<%= arrData ? arrData.slug : '' %>" />
+                          <div class="alert_msg"></div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Artist Name<span>*</span></span>
+                          <input id="artistName" class="form-control" name="artistName" type="text" required="required"
+                            value="<%= arrData ? arrData.artistName : '' %>" />
+                          <div class="alert_msg"></div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>designation</span>
+                          <input id="designation" class="form-control" name="designation" type="text"
+                            value="<%= arrData ? arrData.designation : '' %>" />
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>status</span>
+                          <select name="status" id="status" required="required" class="form-control"
+                            style="height: auto;">
+                            <option <% if(arrData.status=='active' ){ %>selected="selected" <% }%> value="active">Active
+                            </option>
+                            <option <% if(arrData.status=='inactive' ){ %>selected="selected" <% }%>
+                                value="inactive">Inactive</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Facebook Link</span>
+                          <input id="facebookLink" class="form-control" name="facebookLink" type="text"
+                            value="<%= arrData ? arrData.facebookLink : '' %>" />
+                        </div>
+                      </div>
+                        <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Instagram Link</span>
+                          <input id="instaLink" class="form-control" name="instaLink" type="text"
+                            value="<%= arrData ? arrData.instaLink : '' %>" />
+                        </div>
+                      </div>  <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Twitter Link</span>
+                          <input id="twitterLink" class="form-control" name="twitterLink" type="text"
+                            value="<%= arrData ? arrData.twitterLink : '' %>" />
+                        </div>
+                      </div>  <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Linkedin Link</span>
+                          <input id="linkedinLink" class="form-control" name="linkedinLink" type="text"
+                            value="<%= arrData ? arrData.linkedinLink : '' %>" />
+                        </div>
+                      </div>  
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Whatsapp Link</span>
+                          <input id="whatsappLink" class="form-control" name="whatsappLink" type="text"
+                            value="<%= arrData ? arrData.whatsappLink : '' %>" />
+                        </div>
+                     </div>
+                      <div class="col-sm-6">
+                        <div class="animate_form field">
+                          <span>Image</span>
+                                  <input type="file" class="form-control" id="image" name="image" accept="image/*"
+
+                            onchange="preView()" <% if(arrData && arrData.image && arrData.image=='' ){ %>
+
+                          required="required" <% }%> />
+
+                            <input type="hidden" name="update_image" value="<%= arrData ? arrData.image : '' %>" />
+
+                            <div class="upload_img01">
+
+                              <% if(arrData.image !='' && arrData.image !=null){%>
+                                <img id="preview" src="<%= baseurl+ 'admin/artist/'+ arrData.image %>"
+                                  style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+                                <% } else { %>
+                                  <img id="preview" src="<%= baseurl + 'admin/artist/no_image.jpg' %>"
+                                    style="width: 120px; margin-top: 10px;" class="img-thumbnail" />
+
+                                  <% } %>
+
+                        </div>
+                      </div>
+                     
+                    </div>
+                  </div>
+      </div>
+      <div class="btn_right mb-4">
+        <button id="send" type="submit" class="submit_btn">Submit</button>
+      </div>
+      </form>
+      <div class="btn_right mb-4">
+        <button id="send" type="submit" class="submit_btn"><a href="<%= adminbaseurl %>artist/1">Back</a></button>
+      </div>
+    </div>
+    </div>
+
+    <%- include ../partials/footer.html %>
+      <script src="<%= adminbaseurl %>vendors/validator/validator.js"></script>
+      <script type="text/javascript">
+        function preViewImage() {
+          var fileInput = document.getElementById('image');
+          var filePath = fileInput.value;
+          var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+          if (!allowedExtensions.exec(filePath)) {
+            fileInput.value = '';
+            return false;
+          } else {
+            if (fileInput.files && fileInput.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function () {
+                var output = document.getElementById('previewimage');
+                output.src = reader.result;
+              };
+              reader.readAsDataURL(event.target.files[0]);
+              $("#icon-error").remove();
+            };
+          }
+        }
+      </script>
+      <script>
+        $(document).ready(function () {
+          $(".clone_trigger").click(function () {
+            $('.clone').first().clone()
+              .find("input:text").val("").end()
+              .insertBefore(".placer");
+            $('input.cl:last').val('');
+            event.preventDefault();
+          });
+          $(document).on('click', '.remove_trigger', function () {
+            if ($(".clone").length > 0) {
+              if ($(".clone").length == 1) {
+                $(".clone:last")
+                  .find("input:text").val("").end()
+              } else {
+                $(this).closest('.clone').remove();
+              }
+            }
+            event.preventDefault();
+          });
+        });
+      </script>
+
+
+<!-- <script type="text/javascript">
+  function preView() {
+    var fileInput = document.getElementById('image');
+    var filePath = fileInput.value;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+      fileInput.value = '';
+      return false;
+    } else {
+      if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var output = document.getElementById('preview');
+          output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        $("#icon-error").remove();
+      };
+    }
+  }
+  $(function () {
+    // Multiple images preview in browser
+    var imagesPreview = function (input, placeToInsertImagePreview) {
+      if (input.files) {
+        var filesAmount = input.files.length;
+        for (i = 0; i < filesAmount; i++) {
+          var reader = new FileReader();
+          reader.onload = function (event) {
+            $($.parseHTML('<img style="height: 100px; margin: 7px; width: 100px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+          }
+          reader.readAsDataURL(input.files[i]);
+        }
+      }
+    };
+   
+  });
+</script> -->
+
+
+ <script>
+  function encodeImageFileAsURL(element) {
+    var file = element.files[0];
+    const name = file.name;
+    const extension = name.split(".").pop();
+    document.getElementById("extension").value = extension;
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      document.getElementById("image").value = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
